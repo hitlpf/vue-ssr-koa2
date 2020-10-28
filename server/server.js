@@ -9,6 +9,8 @@ const frontendApp = new Koa();
 const backendRouter = new Router();
 const frontendRouter = new Router();
 
+const csrRouter = require('../src/router/csrRouter');
+
 const serverBundle = require(path.resolve(__dirname, '../dist/vue-ssr-server-bundle.json'));
 const clientManifest = require(path.resolve(__dirname, '../dist/vue-ssr-client-manifest.json'));
 const template = fs.readFileSync(path.resolve(__dirname, '../dist/index.ssr.html'), 'utf-8');
@@ -48,9 +50,7 @@ backendRouter.get('*', async (ctx, next) => {
   ctx.body = html;
 });
 
-backendApp
-  .use(backendRouter.routes())
-  .use(backendRouter.allowedMethods());
+backendApp.use(backendRouter.routes()).use(backendRouter.allowedMethods());
 
 backendApp.listen(4000, () => {
   console.log('服务器端渲染地址： http://localhost:4000');
@@ -59,16 +59,16 @@ backendApp.listen(4000, () => {
 // 前端Server
 frontendApp.use(serve(path.resolve(__dirname, '../dist')));
 
-frontendRouter.get(/\/index|\/foo|\/bar/, (ctx, next) => {
-  let html = fs.readFileSync(path.resolve(__dirname, '../dist/index.html'), 'utf-8');
-  ctx.type = 'html';
-  ctx.status = 200;
-  ctx.body = html;
-});
+// frontendRouter.get(/\/index|\/foo|\/bar/, (ctx, next) => {
+//   let html = fs.readFileSync(path.resolve(__dirname, '../dist/index.html'), 'utf-8');
+//   ctx.type = 'html';
+//   ctx.status = 200;
+//   ctx.body = html;
+// });
 
-frontendApp
-  .use(frontendRouter.routes())
-  .use(frontendRouter.allowedMethods());
+frontendApp.use(frontendRouter.routes()).use(frontendRouter.allowedMethods());
+
+csrRouter.init(frontendRouter);
 
 frontendApp.listen(3000, () => {
   console.log('浏览器端渲染地址： http://localhost:3000');

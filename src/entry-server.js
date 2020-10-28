@@ -4,7 +4,7 @@ export default context => {
   // 因为有可能会是异步路由钩子函数或组件，所以我们将返回一个 Promise，
   // 以便服务器能够等待所有的内容在渲染前，就已经准备就绪。
   return new Promise((resolve, reject) => {
-    const { app, store, router, App } = createApp();
+    const { app, store, router } = createApp();
 
     // 向 history 栈添加一个新的记录，所以，当用户点击浏览器后退按钮时，则回到之前的 URL
     router.push(context.url);

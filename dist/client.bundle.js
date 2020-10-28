@@ -1,50 +1,6 @@
 /******/ (function(modules) { // webpackBootstrap
-/******/ 	// install a JSONP callback for chunk loading
-/******/ 	function webpackJsonpCallback(data) {
-/******/ 		var chunkIds = data[0];
-/******/ 		var moreModules = data[1];
-/******/
-/******/
-/******/ 		// add "moreModules" to the modules object,
-/******/ 		// then flag all "chunkIds" as loaded and fire callback
-/******/ 		var moduleId, chunkId, i = 0, resolves = [];
-/******/ 		for(;i < chunkIds.length; i++) {
-/******/ 			chunkId = chunkIds[i];
-/******/ 			if(Object.prototype.hasOwnProperty.call(installedChunks, chunkId) && installedChunks[chunkId]) {
-/******/ 				resolves.push(installedChunks[chunkId][0]);
-/******/ 			}
-/******/ 			installedChunks[chunkId] = 0;
-/******/ 		}
-/******/ 		for(moduleId in moreModules) {
-/******/ 			if(Object.prototype.hasOwnProperty.call(moreModules, moduleId)) {
-/******/ 				modules[moduleId] = moreModules[moduleId];
-/******/ 			}
-/******/ 		}
-/******/ 		if(parentJsonpFunction) parentJsonpFunction(data);
-/******/
-/******/ 		while(resolves.length) {
-/******/ 			resolves.shift()();
-/******/ 		}
-/******/
-/******/ 	};
-/******/
-/******/
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-/******/
-/******/ 	// object to store loaded and loading chunks
-/******/ 	// undefined = chunk not loaded, null = chunk preloaded/prefetched
-/******/ 	// Promise = chunk loading, 0 = chunk loaded
-/******/ 	var installedChunks = {
-/******/ 		"client": 0
-/******/ 	};
-/******/
-/******/
-/******/
-/******/ 	// script path function
-/******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "" + ({}[chunkId]||chunkId) + ".bundle.js"
-/******/ 	}
 /******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
@@ -70,67 +26,6 @@
 /******/ 		return module.exports;
 /******/ 	}
 /******/
-/******/ 	// This file contains only the entry chunk.
-/******/ 	// The chunk loading function for additional chunks
-/******/ 	__webpack_require__.e = function requireEnsure(chunkId) {
-/******/ 		var promises = [];
-/******/
-/******/
-/******/ 		// JSONP chunk loading for javascript
-/******/
-/******/ 		var installedChunkData = installedChunks[chunkId];
-/******/ 		if(installedChunkData !== 0) { // 0 means "already installed".
-/******/
-/******/ 			// a Promise means "currently loading".
-/******/ 			if(installedChunkData) {
-/******/ 				promises.push(installedChunkData[2]);
-/******/ 			} else {
-/******/ 				// setup Promise in chunk cache
-/******/ 				var promise = new Promise(function(resolve, reject) {
-/******/ 					installedChunkData = installedChunks[chunkId] = [resolve, reject];
-/******/ 				});
-/******/ 				promises.push(installedChunkData[2] = promise);
-/******/
-/******/ 				// start chunk loading
-/******/ 				var script = document.createElement('script');
-/******/ 				var onScriptComplete;
-/******/
-/******/ 				script.charset = 'utf-8';
-/******/ 				script.timeout = 120;
-/******/ 				if (__webpack_require__.nc) {
-/******/ 					script.setAttribute("nonce", __webpack_require__.nc);
-/******/ 				}
-/******/ 				script.src = jsonpScriptSrc(chunkId);
-/******/
-/******/ 				// create error before stack unwound to get useful stacktrace later
-/******/ 				var error = new Error();
-/******/ 				onScriptComplete = function (event) {
-/******/ 					// avoid mem leaks in IE.
-/******/ 					script.onerror = script.onload = null;
-/******/ 					clearTimeout(timeout);
-/******/ 					var chunk = installedChunks[chunkId];
-/******/ 					if(chunk !== 0) {
-/******/ 						if(chunk) {
-/******/ 							var errorType = event && (event.type === 'load' ? 'missing' : event.type);
-/******/ 							var realSrc = event && event.target && event.target.src;
-/******/ 							error.message = 'Loading chunk ' + chunkId + ' failed.\n(' + errorType + ': ' + realSrc + ')';
-/******/ 							error.name = 'ChunkLoadError';
-/******/ 							error.type = errorType;
-/******/ 							error.request = realSrc;
-/******/ 							chunk[1](error);
-/******/ 						}
-/******/ 						installedChunks[chunkId] = undefined;
-/******/ 					}
-/******/ 				};
-/******/ 				var timeout = setTimeout(function(){
-/******/ 					onScriptComplete({ type: 'timeout', target: script });
-/******/ 				}, 120000);
-/******/ 				script.onerror = script.onload = onScriptComplete;
-/******/ 				document.head.appendChild(script);
-/******/ 			}
-/******/ 		}
-/******/ 		return Promise.all(promises);
-/******/ 	};
 /******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
@@ -184,16 +79,6 @@
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "/";
 /******/
-/******/ 	// on error function for async loading
-/******/ 	__webpack_require__.oe = function(err) { console.error(err); throw err; };
-/******/
-/******/ 	var jsonpArray = window["webpackJsonp"] = window["webpackJsonp"] || [];
-/******/ 	var oldJsonpFunction = jsonpArray.push.bind(jsonpArray);
-/******/ 	jsonpArray.push = webpackJsonpCallback;
-/******/ 	jsonpArray = jsonpArray.slice();
-/******/ 	for(var i = 0; i < jsonpArray.length; i++) webpackJsonpCallback(jsonpArray[i]);
-/******/ 	var parentJsonpFunction = oldJsonpFunction;
-/******/
 /******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(__webpack_require__.s = "./src/entry-client.js");
@@ -209,7 +94,7 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n//\n//\n//\n//\n//\n//\n//\n//\n/* harmony default export */ __webpack_exports__[\"default\"] = ({\n  beforeCreate: function beforeCreate() {\n    console.log('App.vue beforeCreate');\n  },\n  created: function created() {\n    console.log('App.vue created');\n  },\n  beforeMount: function beforeMount() {\n    console.log('App.vue beforeMount');\n  },\n  mounted: function mounted() {\n    console.log('App.vue mounted');\n  }\n});\n\n//# sourceURL=webpack:///./src/App.vue?./node_modules/babel-loader/lib!./node_modules/vue-loader/lib??vue-loader-options");
+eval("__webpack_require__.r(__webpack_exports__);\n//\n//\n//\n//\n//\n//\n//\n//\n/* harmony default export */ __webpack_exports__[\"default\"] = ({\n  // 服务端只经历beforeCreat和created\n  beforeCreate() {\n    console.log('App.vue beforeCreate');\n  },\n\n  created() {\n    console.log('App.vue created');\n  },\n\n  beforeMount() {\n    console.log('App.vue beforeMount');\n  },\n\n  mounted() {\n    console.log('App.vue mounted');\n  }\n\n});\n\n//# sourceURL=webpack:///./src/App.vue?./node_modules/babel-loader/lib!./node_modules/vue-loader/lib??vue-loader-options");
 
 /***/ }),
 
@@ -221,7 +106,19 @@ eval("__webpack_require__.r(__webpack_exports__);\n//\n//\n//\n//\n//\n//\n//\n/
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n//\n//\n//\n//\n//\n//\n//\n//\n//\nvar fetchInitialData = function fetchInitialData(_ref) {\n  var store = _ref.store;\n  return store.dispatch('fetchBar'); // store.dispatch触发action\n};\n\n/* harmony default export */ __webpack_exports__[\"default\"] = ({\n  asyncData: fetchInitialData,\n  methods: {\n    onHandleClick: function onHandleClick() {\n      alert('bar');\n    }\n  },\n  mounted: function mounted() {\n    // 因为服务端渲染只有 beforeCreate 和 created 两个生命周期，不会走这里\n    // 所以把调用 Ajax 初始化数据也写在这里，是为了供单独浏览器渲染使用\n    var store = this.$store;\n    fetchInitialData({\n      store: store\n    });\n  },\n  computed: {\n    msg: function msg() {\n      return this.$store.state.bar;\n    }\n  }\n});\n\n//# sourceURL=webpack:///./src/components/Bar.vue?./node_modules/babel-loader/lib!./node_modules/vue-loader/lib??vue-loader-options");
+eval("__webpack_require__.r(__webpack_exports__);\n//\n//\n//\n//\n//\n//\n//\n//\n//\nconst fetchInitialData = ({\n  store\n}) => {\n  return store.dispatch('fetchBar'); // store.dispatch触发action\n};\n\n/* harmony default export */ __webpack_exports__[\"default\"] = ({\n  asyncData: fetchInitialData,\n  methods: {\n    onHandleClick() {\n      alert('bar');\n    }\n\n  },\n\n  mounted() {\n    // 因为服务端渲染只有 beforeCreate 和 created 两个生命周期，不会走这里\n    // 所以把调用 Ajax 初始化数据也写在这里，是为了供单独浏览器渲染使用\n    let store = this.$store;\n    fetchInitialData({\n      store\n    });\n  },\n\n  computed: {\n    msg() {\n      return this.$store.state.bar;\n    }\n\n  }\n});\n\n//# sourceURL=webpack:///./src/components/Bar.vue?./node_modules/babel-loader/lib!./node_modules/vue-loader/lib??vue-loader-options");
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/index.js?!./src/components/Foo.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Foo.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n//\n//\n//\n//\n//\n//\n//\n/* harmony default export */ __webpack_exports__[\"default\"] = ({\n  methods: {\n    onHandleClick() {\n      alert('foo');\n    }\n\n  }\n});\n\n//# sourceURL=webpack:///./src/components/Foo.vue?./node_modules/babel-loader/lib!./node_modules/vue-loader/lib??vue-loader-options");
 
 /***/ }),
 
@@ -244,6 +141,17 @@ eval("exports = module.exports = __webpack_require__(/*! ../node_modules/css-loa
 /***/ (function(module, exports, __webpack_require__) {
 
 eval("exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ \"./node_modules/css-loader/lib/css-base.js\")(false);\n// imports\n\n\n// module\nexports.push([module.i, \"\\n.bar {\\n  background: bisque;\\n}\\n\", \"\"]);\n\n// exports\n\n\n//# sourceURL=webpack:///./src/components/Bar.vue?./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src!./node_modules/vue-loader/lib??vue-loader-options");
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js!./node_modules/vue-loader/lib/index.js?!./src/components/Foo.vue?vue&type=style&index=0&lang=css&":
+/*!****************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Foo.vue?vue&type=style&index=0&lang=css& ***!
+  \****************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ \"./node_modules/css-loader/lib/css-base.js\")(false);\n// imports\n\n\n// module\nexports.push([module.i, \"\\n.foo {\\n  background: yellowgreen;\\n}\\n\", \"\"]);\n\n// exports\n\n\n//# sourceURL=webpack:///./src/components/Foo.vue?./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src!./node_modules/vue-loader/lib??vue-loader-options");
 
 /***/ }),
 
@@ -315,6 +223,18 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./src/components/Foo.vue?vue&type=template&id=54024074&":
+/*!*********************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Foo.vue?vue&type=template&id=54024074& ***!
+  \*********************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"render\", function() { return render; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"staticRenderFns\", function() { return staticRenderFns; });\nvar render = function() {\n  var _vm = this\n  var _h = _vm.$createElement\n  var _c = _vm._self._c || _h\n  return _c(\"div\", { staticClass: \"foo\" }, [\n    _c(\"h1\", { on: { click: _vm.onHandleClick } }, [_vm._v(\"Foo\")]),\n    _vm._v(\" \"),\n    _c(\"p\", [_vm._v(\"Component\")])\n  ])\n}\nvar staticRenderFns = []\nrender._withStripped = true\n\n\n\n//# sourceURL=webpack:///./src/components/Foo.vue?./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options");
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js":
 /*!********************************************************************!*\
   !*** ./node_modules/vue-loader/lib/runtime/componentNormalizer.js ***!
@@ -358,6 +278,17 @@ eval("// style-loader: Adds some css to the DOM by adding a <style> tag\n\n// lo
 /***/ (function(module, exports, __webpack_require__) {
 
 eval("// style-loader: Adds some css to the DOM by adding a <style> tag\n\n// load the styles\nvar content = __webpack_require__(/*! !../../node_modules/css-loader!../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../node_modules/postcss-loader/src!../../node_modules/vue-loader/lib??vue-loader-options!./Bar.vue?vue&type=style&index=0&lang=css& */ \"./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js!./node_modules/vue-loader/lib/index.js?!./src/components/Bar.vue?vue&type=style&index=0&lang=css&\");\nif(typeof content === 'string') content = [[module.i, content, '']];\nif(content.locals) module.exports = content.locals;\n// add the styles to the DOM\nvar add = __webpack_require__(/*! ../../node_modules/vue-style-loader/lib/addStylesClient.js */ \"./node_modules/vue-style-loader/lib/addStylesClient.js\").default\nvar update = add(\"23f88d7c\", content, false, {});\n// Hot Module Replacement\nif(false) {}\n\n//# sourceURL=webpack:///./src/components/Bar.vue?./node_modules/vue-style-loader!./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src!./node_modules/vue-loader/lib??vue-loader-options");
+
+/***/ }),
+
+/***/ "./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js!./node_modules/vue-loader/lib/index.js?!./src/components/Foo.vue?vue&type=style&index=0&lang=css&":
+/*!************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-style-loader!./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Foo.vue?vue&type=style&index=0&lang=css& ***!
+  \************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("// style-loader: Adds some css to the DOM by adding a <style> tag\n\n// load the styles\nvar content = __webpack_require__(/*! !../../node_modules/css-loader!../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../node_modules/postcss-loader/src!../../node_modules/vue-loader/lib??vue-loader-options!./Foo.vue?vue&type=style&index=0&lang=css& */ \"./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js!./node_modules/vue-loader/lib/index.js?!./src/components/Foo.vue?vue&type=style&index=0&lang=css&\");\nif(typeof content === 'string') content = [[module.i, content, '']];\nif(content.locals) module.exports = content.locals;\n// add the styles to the DOM\nvar add = __webpack_require__(/*! ../../node_modules/vue-style-loader/lib/addStylesClient.js */ \"./node_modules/vue-style-loader/lib/addStylesClient.js\").default\nvar update = add(\"615eb6bc\", content, false, {});\n// Hot Module Replacement\nif(false) {}\n\n//# sourceURL=webpack:///./src/components/Foo.vue?./node_modules/vue-style-loader!./node_modules/css-loader!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src!./node_modules/vue-loader/lib??vue-loader-options");
 
 /***/ }),
 
@@ -476,7 +407,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"createApp\", function() { return createApp; });\n/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ \"./node_modules/vue/dist/vue.runtime.esm.js\");\n/* harmony import */ var _store_store_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./store/store.js */ \"./src/store/store.js\");\n/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./router */ \"./src/router/index.js\");\n/* harmony import */ var _App_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./App.vue */ \"./src/App.vue\");\n\n\n\n\nfunction createApp() {\n  var store = Object(_store_store_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"])();\n  var router = Object(_router__WEBPACK_IMPORTED_MODULE_2__[\"default\"])();\n  var app = new vue__WEBPACK_IMPORTED_MODULE_0__[\"default\"]({\n    router: router,\n    store: store,\n    render: function render(h) {\n      return h(_App_vue__WEBPACK_IMPORTED_MODULE_3__[\"default\"]);\n    }\n  });\n  return {\n    app: app,\n    store: store,\n    router: router,\n    App: _App_vue__WEBPACK_IMPORTED_MODULE_3__[\"default\"]\n  };\n}\n\n//# sourceURL=webpack:///./src/app.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"createApp\", function() { return createApp; });\n/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ \"./node_modules/vue/dist/vue.runtime.esm.js\");\n/* harmony import */ var _store_store_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./store/store.js */ \"./src/store/store.js\");\n/* harmony import */ var _router_vueRouter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./router/vueRouter */ \"./src/router/vueRouter.js\");\n/* harmony import */ var _App_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./App.vue */ \"./src/App.vue\");\n\n\n\n\nfunction createApp() {\n  const store = Object(_store_store_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"])();\n  const router = Object(_router_vueRouter__WEBPACK_IMPORTED_MODULE_2__[\"default\"])(); // 当我们的代码进入该进程时，它将进行一次取值并留存在内存中。这意味着如果创建一个单例对象，它将在每个传入的请求之间共享。\n  // 因此，我们不应该直接创建一个应用程序实例，而是应该暴露一个可以重复执行的工厂函数\n\n  const app = new vue__WEBPACK_IMPORTED_MODULE_0__[\"default\"]({\n    router,\n    store,\n    render: h => h(_App_vue__WEBPACK_IMPORTED_MODULE_3__[\"default\"])\n  });\n  return {\n    app,\n    store,\n    router,\n    App: _App_vue__WEBPACK_IMPORTED_MODULE_3__[\"default\"]\n  };\n}\n\n//# sourceURL=webpack:///./src/app.js?");
 
 /***/ }),
 
@@ -528,6 +459,54 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 
 /***/ }),
 
+/***/ "./src/components/Foo.vue":
+/*!********************************!*\
+  !*** ./src/components/Foo.vue ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _Foo_vue_vue_type_template_id_54024074___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Foo.vue?vue&type=template&id=54024074& */ \"./src/components/Foo.vue?vue&type=template&id=54024074&\");\n/* harmony import */ var _Foo_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Foo.vue?vue&type=script&lang=js& */ \"./src/components/Foo.vue?vue&type=script&lang=js&\");\n/* empty/unused harmony star reexport *//* harmony import */ var _Foo_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Foo.vue?vue&type=style&index=0&lang=css& */ \"./src/components/Foo.vue?vue&type=style&index=0&lang=css&\");\n/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ \"./node_modules/vue-loader/lib/runtime/componentNormalizer.js\");\n\n\n\n\n\n\n/* normalize component */\n\nvar component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__[\"default\"])(\n  _Foo_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[\"default\"],\n  _Foo_vue_vue_type_template_id_54024074___WEBPACK_IMPORTED_MODULE_0__[\"render\"],\n  _Foo_vue_vue_type_template_id_54024074___WEBPACK_IMPORTED_MODULE_0__[\"staticRenderFns\"],\n  false,\n  null,\n  null,\n  null\n  \n)\n\n/* hot reload */\nif (false) { var api; }\ncomponent.options.__file = \"src/components/Foo.vue\"\n/* harmony default export */ __webpack_exports__[\"default\"] = (component.exports);\n\n//# sourceURL=webpack:///./src/components/Foo.vue?");
+
+/***/ }),
+
+/***/ "./src/components/Foo.vue?vue&type=script&lang=js&":
+/*!*********************************************************!*\
+  !*** ./src/components/Foo.vue?vue&type=script&lang=js& ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Foo_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/babel-loader/lib!../../node_modules/vue-loader/lib??vue-loader-options!./Foo.vue?vue&type=script&lang=js& */ \"./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/index.js?!./src/components/Foo.vue?vue&type=script&lang=js&\");\n/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__[\"default\"] = (_node_modules_babel_loader_lib_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Foo_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__[\"default\"]); \n\n//# sourceURL=webpack:///./src/components/Foo.vue?");
+
+/***/ }),
+
+/***/ "./src/components/Foo.vue?vue&type=style&index=0&lang=css&":
+/*!*****************************************************************!*\
+  !*** ./src/components/Foo.vue?vue&type=style&index=0&lang=css& ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Foo_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/vue-style-loader!../../node_modules/css-loader!../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../node_modules/postcss-loader/src!../../node_modules/vue-loader/lib??vue-loader-options!./Foo.vue?vue&type=style&index=0&lang=css& */ \"./node_modules/vue-style-loader/index.js!./node_modules/css-loader/index.js!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js!./node_modules/vue-loader/lib/index.js?!./src/components/Foo.vue?vue&type=style&index=0&lang=css&\");\n/* harmony import */ var _node_modules_vue_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Foo_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_vue_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Foo_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);\n/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_vue_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Foo_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__) if([\"default\"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_vue_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Foo_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));\n /* harmony default export */ __webpack_exports__[\"default\"] = (_node_modules_vue_style_loader_index_js_node_modules_css_loader_index_js_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_node_modules_vue_loader_lib_index_js_vue_loader_options_Foo_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); \n\n//# sourceURL=webpack:///./src/components/Foo.vue?");
+
+/***/ }),
+
+/***/ "./src/components/Foo.vue?vue&type=template&id=54024074&":
+/*!***************************************************************!*\
+  !*** ./src/components/Foo.vue?vue&type=template&id=54024074& ***!
+  \***************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Foo_vue_vue_type_template_id_54024074___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../node_modules/vue-loader/lib??vue-loader-options!./Foo.vue?vue&type=template&id=54024074& */ \"./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./src/components/Foo.vue?vue&type=template&id=54024074&\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"render\", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Foo_vue_vue_type_template_id_54024074___WEBPACK_IMPORTED_MODULE_0__[\"render\"]; });\n\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"staticRenderFns\", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Foo_vue_vue_type_template_id_54024074___WEBPACK_IMPORTED_MODULE_0__[\"staticRenderFns\"]; });\n\n\n\n//# sourceURL=webpack:///./src/components/Foo.vue?");
+
+/***/ }),
+
 /***/ "./src/entry-client.js":
 /*!*****************************!*\
   !*** ./src/entry-client.js ***!
@@ -536,19 +515,19 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _app_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./app.js */ \"./src/app.js\");\n // const { app } = createApp();\n// app.$mount('#app');\n\nvar _createApp = Object(_app_js__WEBPACK_IMPORTED_MODULE_0__[\"createApp\"])(),\n    app = _createApp.app,\n    router = _createApp.router,\n    store = _createApp.store;\n\nif (window.__INITIAL_STATE__) {\n  store.replaceState(window.__INITIAL_STATE__);\n}\n\nrouter.onReady(function () {\n  // 使用 `router.beforeResolve()`，以便确保所有异步组件都 resolve。\n  router.beforeResolve(function (to, from, next) {\n    var matched = router.getMatchedComponents(to);\n    var prevMatched = router.getMatchedComponents(from); // 我们只关心非预渲染的组件\n    // 所以我们对比它们，找出两个匹配列表的差异组件\n\n    var diffed = false;\n    var activated = matched.filter(function (c, i) {\n      return diffed || (diffed = prevMatched[i] !== c);\n    });\n\n    if (!activated.length) {\n      return next();\n    }\n\n    Promise.all(activated.map(function (c) {\n      if (c.asyncData) {\n        return c.asyncData({\n          store: store,\n          route: to\n        });\n      }\n    })).then(function () {\n      next();\n    })[\"catch\"](next);\n  });\n  app.$mount('#app');\n});\n\n//# sourceURL=webpack:///./src/entry-client.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _app_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./app.js */ \"./src/app.js\");\n // const { app } = createApp();\n// app.$mount('#app');\n\nconst {\n  app,\n  router,\n  store\n} = Object(_app_js__WEBPACK_IMPORTED_MODULE_0__[\"createApp\"])();\n\nif (window.__INITIAL_STATE__) {\n  store.replaceState(window.__INITIAL_STATE__);\n}\n\nrouter.onReady(() => {\n  // 使用 `router.beforeResolve()`，以便确保所有异步组件都 resolve。\n  router.beforeResolve((to, from, next) => {\n    const matched = router.getMatchedComponents(to);\n    const prevMatched = router.getMatchedComponents(from); // 我们只关心非预渲染的组件\n    // 所以我们对比它们，找出两个匹配列表的差异组件\n\n    let diffed = false;\n    const activated = matched.filter((c, i) => {\n      return diffed || (diffed = prevMatched[i] !== c);\n    });\n\n    if (!activated.length) {\n      return next();\n    }\n\n    Promise.all(activated.map(c => {\n      if (c.asyncData) {\n        return c.asyncData({\n          store,\n          route: to\n        });\n      }\n    })).then(() => {\n      next();\n    }).catch(next);\n  });\n  app.$mount('#app');\n});\n\n//# sourceURL=webpack:///./src/entry-client.js?");
 
 /***/ }),
 
-/***/ "./src/router/index.js":
-/*!*****************************!*\
-  !*** ./src/router/index.js ***!
-  \*****************************/
+/***/ "./src/router/vueRouter.js":
+/*!*********************************!*\
+  !*** ./src/router/vueRouter.js ***!
+  \*********************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ \"./node_modules/vue/dist/vue.runtime.esm.js\");\n/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-router */ \"./node_modules/vue-router/dist/vue-router.esm.js\");\n/* harmony import */ var _components_Bar_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Bar.vue */ \"./src/components/Bar.vue\");\n\n\n\nvue__WEBPACK_IMPORTED_MODULE_0__[\"default\"].use(vue_router__WEBPACK_IMPORTED_MODULE_1__[\"default\"]);\n\nfunction createRouter() {\n  var routes = [{\n    path: '/bar',\n    component: _components_Bar_vue__WEBPACK_IMPORTED_MODULE_2__[\"default\"]\n  }, {\n    path: '/foo',\n    component: function component() {\n      return new Promise(function (resolve) {\n        __webpack_require__.e(/*! require.ensure */ 0).then((function (require) {\n          resolve(__webpack_require__(/*! ../components/Foo.vue */ \"./src/components/Foo.vue\"));\n        }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);\n      });\n    } // 异步路由\n\n  }];\n  var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__[\"default\"]({\n    mode: 'history',\n    routes: routes\n  });\n  return router;\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (createRouter);\n\n//# sourceURL=webpack:///./src/router/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ \"./node_modules/vue/dist/vue.runtime.esm.js\");\n/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-router */ \"./node_modules/vue-router/dist/vue-router.esm.js\");\n/* harmony import */ var _components_Bar_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Bar.vue */ \"./src/components/Bar.vue\");\n/* harmony import */ var _components_Foo_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Foo.vue */ \"./src/components/Foo.vue\");\n\n\n\n\nvue__WEBPACK_IMPORTED_MODULE_0__[\"default\"].use(vue_router__WEBPACK_IMPORTED_MODULE_1__[\"default\"]);\n\nfunction createRouter() {\n  const routes = [{\n    path: '/bar',\n    component: _components_Bar_vue__WEBPACK_IMPORTED_MODULE_2__[\"default\"]\n  }, {\n    path: '/foo',\n    component: _components_Foo_vue__WEBPACK_IMPORTED_MODULE_3__[\"default\"] //   component: () => import('../components/Foo.vue')   // 异步路由\n\n  }];\n  const router = new vue_router__WEBPACK_IMPORTED_MODULE_1__[\"default\"]({\n    mode: 'history',\n    routes\n  });\n  return router;\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (createRouter);\n\n//# sourceURL=webpack:///./src/router/vueRouter.js?");
 
 /***/ }),
 
@@ -560,7 +539,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var vue_
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ \"./node_modules/vue/dist/vue.runtime.esm.js\");\n/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ \"./node_modules/vuex/dist/vuex.esm.js\");\n\n\nvue__WEBPACK_IMPORTED_MODULE_0__[\"default\"].use(vuex__WEBPACK_IMPORTED_MODULE_1__[\"default\"]);\n\nvar _fetchBar = function fetchBar() {\n  return new Promise(function (resolve, reject) {\n    setTimeout(function () {\n      console.log(111111);\n      resolve('bar 组件返回 ajax 数据');\n    }, 1000);\n  });\n};\n\nfunction createStore() {\n  var store = new vuex__WEBPACK_IMPORTED_MODULE_1__[\"default\"].Store({\n    state: {\n      bar: '',\n      foo: ''\n    },\n    mutations: {\n      'SET_BAR': function SET_BAR(state, data) {\n        state.bar = data;\n      },\n      'SET_FOO': function SET_FOO(state, data) {\n        state.foo = data;\n      }\n    },\n    actions: {\n      fetchBar: function fetchBar(_ref) {\n        var commit = _ref.commit;\n        return _fetchBar().then(function (data) {\n          commit('SET_BAR', data);\n          commit('SET_FOO', data);\n        })[\"catch\"](function (err) {\n          console.error(err);\n        });\n      }\n    }\n  }); // 这句的作用是如果服务端的vuex数据发生改变，就将客户端的数据替换掉，保证客户端和服务端的数据同步\n\n  if (typeof window !== 'undefined' && window.__INITIAL_STATE__) {\n    console.log('window.__INITIAL_STATE__', window.__INITIAL_STATE__);\n    store.replaceState(window.__INITIAL_STATE__);\n  } else {\n    console.log('no browser');\n  }\n\n  return store;\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (createStore);\n\n//# sourceURL=webpack:///./src/store/store.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ \"./node_modules/vue/dist/vue.runtime.esm.js\");\n/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ \"./node_modules/vuex/dist/vuex.esm.js\");\n\n\nvue__WEBPACK_IMPORTED_MODULE_0__[\"default\"].use(vuex__WEBPACK_IMPORTED_MODULE_1__[\"default\"]);\n\nconst fetchBar = function () {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      console.log(111111);\n      resolve('bar 组件返回 ajax 数据');\n    }, 1000);\n  });\n};\n\nfunction createStore() {\n  const store = new vuex__WEBPACK_IMPORTED_MODULE_1__[\"default\"].Store({\n    state: {\n      bar: '',\n      foo: ''\n    },\n    mutations: {\n      'SET_BAR'(state, data) {\n        state.bar = data;\n      },\n\n      'SET_FOO'(state, data) {\n        state.foo = data;\n      }\n\n    },\n    actions: {\n      fetchBar({\n        commit\n      }) {\n        return fetchBar().then(data => {\n          commit('SET_BAR', data);\n          commit('SET_FOO', data);\n        }).catch(err => {\n          console.error(err);\n        });\n      }\n\n    }\n  }); // 这句的作用是如果服务端的vuex数据发生改变，就将客户端的数据替换掉，保证客户端和服务端的数据同步\n\n  if (typeof window !== 'undefined' && window.__INITIAL_STATE__) {\n    console.log('window.__INITIAL_STATE__', window.__INITIAL_STATE__);\n    store.replaceState(window.__INITIAL_STATE__);\n  } else {\n    console.log('no browser');\n  }\n\n  return store;\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (createStore);\n\n//# sourceURL=webpack:///./src/store/store.js?");
 
 /***/ })
 
